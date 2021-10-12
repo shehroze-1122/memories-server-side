@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const postSchema = mongoose.Schema({
     title: String,
     message: String,
-    creater: String,
+    creator: String,
     tags: [String],
     selectedFile: String,
     likes:{
@@ -13,11 +13,11 @@ const postSchema = mongoose.Schema({
 
     createdAt:{
         type: Date,
-        default: new Date()
+        default: Date
     }
 })
 
 
-const postModel = mongoose.model('postModel', postSchema);
+const postModel = mongoose.model('postmodels', postSchema);
 
 export default postModel;
