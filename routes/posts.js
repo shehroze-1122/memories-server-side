@@ -3,10 +3,10 @@ import { addPost, getPosts, updatePost, deletePost, incrementLikes, decrementLik
 const router = express.Router();
 
 router.get('/', getPosts);
-router.post('/', addPost);
+router.put('/:id/likesInc', incrementLikes);
+router.put('/:id/likesDec', decrementLikes);
 router.put('/:id', updatePost)
+router.post('/', addPost);
 router.delete('/:id', deletePost)
-router.put('/likesInc', incrementLikes)
-router.put('/likesDec', decrementLikes)
 
 export default router;
