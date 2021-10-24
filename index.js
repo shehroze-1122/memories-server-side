@@ -13,9 +13,11 @@ app.use(express.json({limit: '30mb', extended: true}))
 
 app.use('/posts', postRoutes);
 
+app.get('/', (req, res)=>{
+    res.json('Working');
+})
 const CONNECTION_URL = process.env.DATABASE_CONNECTION_URI;
 
-console.log(CONNECTION_URL)
 const PORT = process.env.PORT;
 
 mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
