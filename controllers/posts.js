@@ -6,7 +6,7 @@ export const getPosts= async (req, res)=>{
     // res.status(200).json('Working posts route')
     try {
        const posts = await postModel.find({});
-       res.status(200).json(posts);
+       res.status(200).json('njndd');
    } catch (error) {
        res.status(404).json({message:error.message});
    }
