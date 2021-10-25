@@ -13,9 +13,6 @@ app.use(express.json({limit: '30mb', extended: true}))
 
 app.use('/posts', postRoutes);
 
-app.get('/', (req, res)=>{
-    res.json('Working');
-})
 const CONNECTION_URL = process.env.DATABASE_CONNECTION_URI;
 
 const PORT = process.env.PORT;
