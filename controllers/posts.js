@@ -50,10 +50,14 @@ export const likePost = async (req, res) => {
 
 export const updatePost = async (req, res) => {
   const { id: _id } = req.params
-  const post = req.body
+  const postBody = req.body
 
   if (mongoose.Types.ObjectId.isValid(_id)) {
-    const updatedPost = await postModel.findByIdAndUpdate(_id, post, { new: true })
+    const post = await postModel.findById(_id)
+    if (!post) return res.status(404).send({ message: 'Post not found' })
+
+    if (post.creator !== req.userId) return res.status(401).send({ message: 'Operation not permitted' })
+    const updatedPost = await postModel.findByIdAndUpdate(_id, postBody, { new: true })
     res.status(200).json(updatedPost)
   } else {
     res.status(404).json('No user with this ID')
@@ -64,9 +68,15 @@ export const deletePost = async (req, res) => {
   const { id } = req.params
 
   if (mongoose.Types.ObjectId.isValid(id)) {
-    await postModel.findByIdAndDelete(id)
+    const post = await postModel.findById(id)
+    if (!post) return res.status(404).send({ message: 'Post not found' })
+
+    if (post.creator !== req.userId) return res.status(401).send({ message: 'Operation not permitted' })
+
+    await postModel.deleteOne({ _id: id })
+
     res.status(200).send({ message: 'Deleted Successfully' })
   } else {
-    res.status(404).send('Bad Request')
+    res.status(400).send({ message: 'Invalid request' })
   }
 }
