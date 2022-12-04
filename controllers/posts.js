@@ -25,21 +25,23 @@ export const likePost = async (req, res) => {
   try {
     const { id } = req.params
 
-    if (!req.userId) res.status(400).json('Unauthenticated')
-
     if (mongoose.Types.ObjectId.isValid(id)) {
       const post = await postModel.findById(id)
-      const index = post.likes.findIndex(id => id === String(req.userId))
+      if (!post) return res.status(404).send({ message: 'Post not found' })
 
-      if (index === -1) {
-        post.likes.push(req.userId)
+      const userId = String(req.userId)
+      const likes = new Set(post.likes)
+
+      if (!likes.has(userId)) {
+        likes.add(userId)
       } else {
-        post.likes = post.likes.filter(id => id !== String(req.userId))
+        likes.delete(userId)
       }
 
-      const updatedPost = await postModel.findByIdAndUpdate(id, post, { new: true })
+      post.likes = [...likes]
+      await post.save()
 
-      res.json(updatedPost)
+      res.status(200).json(post)
     } else {
       res.status(400).json('Bad Request')
     }
